@@ -1,0 +1,53 @@
+<html>
+    
+<head>
+</head>
+
+<body>
+
+<form method="POST">
+    {{.csrfField}}
+
+    {{with .Source}}
+        <input type="hidden" name="owner" value="{{.Owner}}">
+        <input type="hidden" name="repo" value="{{.Repo}}">
+        <input type="hidden" name="ref" value="{{.Ref}}">
+    {{end}}
+
+    <select name="target">
+        {{range .Targets}}
+            <option value="{{.Entity.OrgGUID}}:{{.Entity.OrgName}}:{{.Meta.GUID}}:{{.Entity.Name}}">{{.Entity.OrgName}} | {{.Entity.Name}}</option>
+        {{end}}
+    </select>
+
+    {{ with .App}}
+        {{range $name, $envvar := .EnvVars}}
+            <label for="env-{{$name}}">
+                {{if $envvar.Required}}* {{end}}
+                {{$name}}
+                <small>{{$envvar.Description}}</small>
+            </label>
+            <input 
+                    type="text"
+                    id="env-{{$name}}"
+                    {{if $envvar.Value}}value="{{$envvar.Value}}"{{end}}
+                    {{if $envvar.Required}}required{{end}}
+                >
+        {{end}}
+    {{end}}
+
+    <table>
+    {{range .Services}}
+        <tr>
+            <td>{{.Service}}</td>
+            <td>{{.Plan}}</td>
+        </tr>
+    {{end}}
+    </table>
+
+    <button type="submit">Deploy</button>
+</form>
+
+</body>
+
+</html>
