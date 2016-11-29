@@ -1,0 +1,20 @@
+package: github.com/jmcarp/deploy-to-cf
+import:
+- package: code.cloudfoundry.org/cli
+  subpackages:
+  - cf/configuration/coreconfig
+  - cf/models
+- package: github.com/google/go-github
+  subpackages:
+  - github
+- package: github.com/gorilla/csrf
+  version: ~1.4.0
+- package: github.com/gorilla/mux
+  version: ~1.1.0
+- package: github.com/gorilla/schema
+- package: github.com/gorilla/sessions
+  version: ~1.1.0
+- package: github.com/kelseyhightower/envconfig
+  version: ~1.2.0
+- package: golang.org/x/oauth2
+- package: gopkg.in/yaml.v2
