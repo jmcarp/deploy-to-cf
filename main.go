@@ -224,6 +224,8 @@ func RequireAuth(context *Context, handler http.Handler) http.Handler {
 		if _, ok := session.Values["token"].(oauth2.Token); ok {
 			handler.ServeHTTP(w, r)
 		} else {
+			session.Values["redirect"] = r.URL.String()
+			session.Save(r, w)
 			http.Redirect(w, r, "/auth", http.StatusFound)
 		}
 	})
@@ -257,6 +259,11 @@ func Callback(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	redirect, ok := session.Values["redirect"].(string)
+	if !ok {
+		redirect = c.config.Hostname
+	}
+
 	token, err := c.oauthConfig.Exchange(oauth2.NoContext, code)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -265,12 +272,15 @@ func Callback(c *Context, w http.ResponseWriter, r *http.Request) {
 
 	session.Values["token"] = *token
 	delete(session.Values, "state")
+	delete(session.Values, "redirect")
 
 	err = session.Save(r, w)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	http.Redirect(w, r, redirect, http.StatusFound)
 }
 
 type Source struct {
@@ -430,7 +440,7 @@ func main() {
 		ClientID:     config.ClientID,
 		ClientSecret: config.ClientSecret,
 		RedirectURL:  config.Hostname + "/callback",
-		Scopes:       []string{"cloud_controller.read", "cloud_controller.write", "openid"},
+		Scopes:       []string{"cloud_controller.read", "cloud_controller.write", "cloud_controller.admin", "openid"},
 		Endpoint: oauth2.Endpoint{
 			AuthURL:  config.AuthURL + "/oauth/authorize",
 			TokenURL: config.TokenURL + "/oauth/token",
