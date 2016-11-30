@@ -29,6 +29,7 @@
             </label>
             <input 
                     type="text"
+                    name="{{$name}}"
                     id="env-{{$name}}"
                     {{if $envvar.Value}}value="{{$envvar.Value}}"{{end}}
                     {{if $envvar.Required}}required{{end}}

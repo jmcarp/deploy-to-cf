@@ -62,8 +62,8 @@ type AppWrapper struct {
 }
 
 type App struct {
-	EnvVars  map[string]EnvVar `yaml:"env"`
-	Services []Service         `yaml:"services"`
+	EnvVars  map[string]*EnvVar `yaml:"env"`
+	Services []Service          `yaml:"services"`
 }
 
 func LoadConfig(client *github.Client, owner, repo, ref string) (App, error) {
