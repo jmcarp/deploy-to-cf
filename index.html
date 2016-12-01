@@ -20,31 +20,35 @@
         {{end}}
     </select>
 
-    {{ with .App}}
+    {{with .App}}
+        <h1>Environment variables</h1>
         {{range $name, $envvar := .EnvVars}}
-            <label for="env-{{$name}}">
-                {{if $envvar.Required}}* {{end}}
-                {{$name}}
-                <small>{{$envvar.Description}}</small>
-            </label>
-            <input 
-                    type="text"
-                    name="{{$name}}"
-                    id="env-{{$name}}"
-                    {{if $envvar.Value}}value="{{$envvar.Value}}"{{end}}
-                    {{if $envvar.Required}}required{{end}}
-                >
+            <div>
+                <label for="env-{{$name}}">
+                    {{if $envvar.Required}}* {{end}}
+                    {{$name}}
+                    <small>{{$envvar.Description}}</small>
+                </label>
+                <input
+                        type="text"
+                        name="{{$name}}"
+                        id="env-{{$name}}"
+                        {{if $envvar.Value}}value="{{$envvar.Value}}"{{end}}
+                        {{if $envvar.Required}}required{{end}}
+                    >
+            </div>
         {{end}}
-    {{end}}
 
-    <table>
-    {{range .Services}}
-        <tr>
-            <td>{{.Service}}</td>
-            <td>{{.Plan}}</td>
-        </tr>
+        <h1>Services</h1>
+        <table>
+        {{range .Services}}
+            <tr>
+                <td>{{.Service}}</td>
+                <td>{{.Plan}}</td>
+            </tr>
+        {{end}}
+        </table>
     {{end}}
-    </table>
 
     <button type="submit">Deploy</button>
 </form>

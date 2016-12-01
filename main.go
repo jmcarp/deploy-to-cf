@@ -32,15 +32,16 @@ import (
 )
 
 type Config struct {
-	SecretKey     string `envconfig:"SECRET_KEY" required:"true"`
-	SecureCookies bool   `envconfig:"SECURE_COOKIES" default:"true"`
-	Hostname      string `envconfig:"HOSTNAME" required:"true"`
-	ClientID      string `envconfig:"CLIENT_ID" required:"true"`
-	ClientSecret  string `envconfig:"CLIENT_SECRET" required:"true"`
-	AuthURL       string `envconfig:"AUTH_URL" required:"true"`
-	TokenURL      string `envconfig:"TOKEN_URL" required:"true"`
-	CFURL         string `envconfig:"CF_URL" required:"true"`
-	Port          string `envconfig:"PORT" default:"3000"`
+	SecretKey      string `envconfig:"SECRET_KEY" required:"true"`
+	SecureCookies  bool   `envconfig:"SECURE_COOKIES" default:"true"`
+	Hostname       string `envconfig:"HOSTNAME" required:"true"`
+	ClientID       string `envconfig:"CLIENT_ID" required:"true"`
+	ClientSecret   string `envconfig:"CLIENT_SECRET" required:"true"`
+	AuthURL        string `envconfig:"AUTH_URL" required:"true"`
+	TokenURL       string `envconfig:"TOKEN_URL" required:"true"`
+	CFURL          string `envconfig:"CF_URL" required:"true"`
+	ServiceTimeout int    `envconfig:"SERVICE_TIMEOUT" default:"600"`
+	Port           string `envconfig:"PORT" default:"3000"`
 }
 
 type EnvVar struct {
@@ -400,7 +401,7 @@ func Deploy(c *Context, w http.ResponseWriter, r *http.Request) {
 	cf := NewCloudFoundry(c.config, token, envPath, target[0], target[1], target[2], target[3])
 	err = cf.writeConfig()
 
-	route, err := cf.Create(app, manifestPath, filepath.Join(appPath, tarPath))
+	route, err := cf.Create(app, manifestPath, filepath.Join(appPath, tarPath), c.config.ServiceTimeout)
 	fmt.Println(route, err)
 }
 
@@ -512,8 +513,8 @@ func (cf *CloudFoundry) writeConfig() error {
 	return ioutil.WriteFile(path, output, 0644)
 }
 
-func (cf *CloudFoundry) Create(app App, manifest, path string) (string, error) {
-	err := cf.createServices(app)
+func (cf *CloudFoundry) Create(app App, manifest, path string, timeout int) (string, error) {
+	err := cf.createServices(app, timeout)
 	if err != nil {
 		return "", err
 	}
@@ -526,9 +527,9 @@ func (cf *CloudFoundry) Create(app App, manifest, path string) (string, error) {
 	return cf.getRoute("testapp")
 }
 
-func (cf *CloudFoundry) createServices(app App) error {
+func (cf *CloudFoundry) createServices(app App, timeout int) error {
 	for _, service := range app.Services {
-		err := cf.createService(service)
+		err := cf.createService(service, timeout)
 		if err != nil {
 			return err
 		}
@@ -536,7 +537,7 @@ func (cf *CloudFoundry) createServices(app App) error {
 	return nil
 }
 
-func (cf *CloudFoundry) createService(service Service) error {
+func (cf *CloudFoundry) createService(service Service, timeout int) error {
 	args := []string{"create-service", service.Service, service.Plan, service.Label}
 	if len(service.Tags) > 0 {
 		args = append(args, "-t", strings.Join(service.Tags, ","))
@@ -554,7 +555,7 @@ func (cf *CloudFoundry) createService(service Service) error {
 		return err
 	}
 
-	return cf.checkService(service, 30)
+	return cf.checkService(service, timeout)
 }
 
 func (cf *CloudFoundry) checkService(service Service, timeout int) error {
