@@ -3,11 +3,14 @@ package main
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/gob"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"html/template"
+	"image"
+	"image/png"
 	"io"
 	"io/ioutil"
 	"log"
@@ -42,6 +45,7 @@ type Config struct {
 	CFURL          string `envconfig:"CF_URL" required:"true"`
 	ServiceTimeout int    `envconfig:"SERVICE_TIMEOUT" default:"600"`
 	Port           string `envconfig:"PORT" default:"3000"`
+	ButtonLogo     string `envconfig:"BUTTON_LOGO"`
 }
 
 type EnvVar struct {
@@ -65,6 +69,22 @@ type AppWrapper struct {
 type App struct {
 	EnvVars  map[string]*EnvVar `yaml:"env"`
 	Services []Service          `yaml:"services"`
+}
+
+func WriteImage(data string, path string) error {
+	out, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	reader := base64.NewDecoder(base64.StdEncoding, strings.NewReader(data))
+	m, _, err := image.Decode(reader)
+	if err != nil {
+		return err
+	}
+
+	return png.Encode(out, m)
 }
 
 func LoadConfig(client *github.Client, owner, repo, ref string) (App, error) {
@@ -448,6 +468,13 @@ func main() {
 		},
 	}
 
+	if config.ButtonLogo != "" {
+		err := WriteImage(config.ButtonLogo, "./static/button-logo.png")
+		if err != nil {
+			log.Fatalf("Error writing image: %s", err.Error())
+		}
+	}
+
 	gob.Register(oauth2.Token{})
 
 	ctx := &Context{
@@ -464,6 +491,8 @@ func main() {
 
 	r.Path("/").Methods("GET").Handler(RequireAuth(ctx, Contextify(ctx, Index)))
 	r.Path("/").Methods("POST").Handler(RequireAuth(ctx, Contextify(ctx, Deploy)))
+
+	r.PathPrefix("/static").Handler(http.StripPrefix("/static", http.FileServer(http.Dir("./static"))))
 
 	p := csrf.Protect([]byte(config.SecretKey), csrf.Secure(config.SecureCookies))
 	http.ListenAndServe(":"+config.Port, p(r))

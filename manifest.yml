@@ -7,3 +7,31 @@ buildpack: go_buildpack
 env:
   GOVERSION: go1.7
   GO_INSTALL_PACKAGE_SPEC: ". ./vendor/code.cloudfoundry.org/cli"
+deployment:
+  env:
+    SECRET_KEY:
+      description: "Secret key"
+      required: true
+    SECURE_COOKIES:
+      description: "Use secure cookies"
+      value: "true"
+    HOSTNAME:
+      description: "Application URL"
+      required: true
+    CLIENT_ID:
+      description: "UAA client ID"
+      required: true
+    CLIENT_SECRET:
+      description: "UAA client secret"
+      required: true
+    AUTH_URL:
+      description: "Cloud Foundry authorization URL"
+      required: true
+    TOKEN_URL:
+      description: "Cloud Foundry token URL"
+      required: true
+    CF_URL:
+      description: "Cloud Foundry API URL"
+      required: true
+    BUTTON_LOGO:
+      description: "Button logo (base64-encoded)"
