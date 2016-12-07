@@ -2,6 +2,7 @@ package actions
 
 import (
 	"context"
+	"html/template"
 	"log"
 	"net/http"
 
@@ -39,10 +40,12 @@ func Index(c *h.Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c.Templates.ExecuteTemplate(w, "index.html", map[string]interface{}{
+	c.Templates = template.Must(template.ParseFiles("templates/index.html", LayoutPath))
+	c.Templates.ExecuteTemplate(w, "base", map[string]interface{}{
 		csrf.TemplateTag: csrf.TemplateField(r),
 		"App":            app,
 		"Source":         source,
 		"Targets":        targets,
+		"Title":          "Home",
 	})
 }

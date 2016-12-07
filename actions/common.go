@@ -1,5 +1,6 @@
 package actions
 
+const LayoutPath string = "templates/layout.html"
 
 type Source struct {
 	Owner string `schema:"owner,required"`

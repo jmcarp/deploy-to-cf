@@ -22,7 +22,7 @@ func main() {
 		log.Fatalf("Invalid configuration: %s", err.Error())
 	}
 	store := sessions.NewCookieStore([]byte(config.SecretKey))
-	templates := template.Must(template.ParseFiles("index.html"))
+	templates := template.Must(template.ParseFiles("templates/index.html"))
 	oauthConfig := &oauth2.Config{
 		ClientID:     config.ClientID,
 		ClientSecret: config.ClientSecret,
