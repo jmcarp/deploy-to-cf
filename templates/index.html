@@ -9,33 +9,37 @@
         <input type="hidden" name="ref" value="{{.Ref}}">
     {{end}}
 
-    <select name="target">
-        {{range .Targets}}
-            <option value="{{.Entity.OrgGUID}}:{{.Entity.OrgName}}:{{.Meta.GUID}}:{{.Entity.Name}}">{{.Entity.OrgName}} | {{.Entity.Name}}</option>
-        {{end}}
-    </select>
+    <div class="form-group">
+        <label for="target">Choose org and space</label>
+        <select id="target" name="target" class="form-control">
+            {{range .Targets}}
+                <option value="{{.Entity.OrgGUID}}:{{.Entity.OrgName}}:{{.Meta.GUID}}:{{.Entity.Name}}">{{.Entity.OrgName}} | {{.Entity.Name}}</option>
+            {{end}}
+        </select>
+    </div>
 
     {{with .App}}
-        <h1>Environment variables</h1>
+        <h2>Environment variables</h2>
         {{range $name, $envvar := .EnvVars}}
-            <div>
+            <div class="form-group">
                 <label for="env-{{$name}}">
                     {{if $envvar.Required}}* {{end}}
                     {{$name}}
-                    <small>{{$envvar.Description}}</small>
+                    <span>{{$envvar.Description}}</span>
                 </label>
                 <input
                         type="text"
                         name="{{$name}}"
                         id="env-{{$name}}"
+                        class="form-control"
                         {{if $envvar.Value}}value="{{$envvar.Value}}"{{end}}
                         {{if $envvar.Required}}required{{end}}
                     >
             </div>
         {{end}}
 
-        <h1>Services</h1>
-        <table>
+        <h2>Services</h2>
+        <table class="table">
         {{range .Services}}
             <tr>
                 <td>{{.Service}}</td>
@@ -45,6 +49,6 @@
         </table>
     {{end}}
 
-    <button type="submit">Deploy</button>
+    <button type="submit" class="btn btn-default">Deploy</button>
 </form>
 {{end}}
