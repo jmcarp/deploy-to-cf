@@ -100,13 +100,10 @@ func Deploy(c *h.Context, w http.ResponseWriter, r *http.Request) {
 
 func getArchiveURL(client *github.Client, user, repo, ref string) (string, error) {
 	opts := &github.RepositoryContentGetOptions{Ref: ref}
-	log.Println(user, repo, opts)
-	url, foo, err := client.Repositories.GetArchiveLink(user, repo, "tarball", opts)
-	log.Println(foo)
+	url, _, err := client.Repositories.GetArchiveLink(user, repo, "tarball", opts)
 	if err != nil {
 		return "", err
 	}
-	log.Println(url)
 	return url.String(), nil
 }
 

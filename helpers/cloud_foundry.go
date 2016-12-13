@@ -12,8 +12,13 @@ import (
 	"strings"
 	"time"
 
+	"code.cloudfoundry.org/cli/cf/commandregistry"
+	"code.cloudfoundry.org/cli/cf/commandsloader"
 	"code.cloudfoundry.org/cli/cf/configuration/coreconfig"
+	"code.cloudfoundry.org/cli/cf/flags"
 	"code.cloudfoundry.org/cli/cf/models"
+	"code.cloudfoundry.org/cli/cf/requirements"
+	"code.cloudfoundry.org/cli/cf/trace"
 	"golang.org/x/oauth2"
 )
 
@@ -135,8 +140,37 @@ func (cf *CloudFoundry) checkService(service Service, timeout int) error {
 }
 
 func (cf *CloudFoundry) createApp(app, manifest, path string) error {
-	args := []string{"push", app, "-f", manifest, "-p", path}
-	return cf.cf(args...).Run()
+	os.Setenv("CF_HOME", cf.path)
+	defer os.Unsetenv("CF_HOME")
+
+	traceLogger := trace.NewLogger(os.Stdout, false, "", "")
+
+	deps := commandregistry.NewDependency(os.Stdout, traceLogger, os.Getenv("CF_DIAL_TIMEOUT"))
+	defer deps.Config.Close()
+
+	commandsloader.Load()
+	cmd := commandregistry.Commands.FindCommand("push")
+	cmd = cmd.SetDependency(deps, false)
+
+	meta := cmd.MetaData()
+	flagContext := flags.NewFlagContext(meta.Flags)
+	flagContext.SkipFlagParsing(meta.SkipFlagParsing)
+	flagContext.Parse(app, "-f", manifest, "-p", path)
+
+	requirementsFactory := requirements.NewFactory(deps.Config, deps.RepoLocator)
+	reqs, err := cmd.Requirements(requirementsFactory, flagContext)
+	if err != nil {
+		return err
+	}
+
+	for _, req := range reqs {
+		err = req.Execute()
+		if err != nil {
+			return err
+		}
+	}
+
+	return cmd.Execute(flagContext)
 }
 
 func (cf *CloudFoundry) cf(args ...string) *exec.Cmd {
