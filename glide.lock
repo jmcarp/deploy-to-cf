@@ -1,77 +1,258 @@
-hash: 8aeffb5e99a5007b52ba4e481432536671de7f91e9e0f2f3951461338266ffa7
-updated: 2016-11-28T23:48:26.860941844-05:00
+hash: b391166288f941fc45359f2a27ae8ddf1387c36e0e218402a06781d3c2a2ea2e
+updated: 2017-07-06T21:41:48.37204633-04:00
 imports:
 - name: code.cloudfoundry.org/cli
-  version: 269814d4746c5f53ec1de5ecb9c5eb3c289c8750
+  version: 9e024bdbd0e9916bc4f3c16834c8610991338b30
   subpackages:
+  - cf
+  - cf/actors
+  - cf/actors/brokerbuilder
+  - cf/actors/planbuilder
+  - cf/actors/plugininstaller
+  - cf/actors/pluginrepo
+  - cf/actors/servicebuilder
+  - cf/actors/userprint
+  - cf/api
+  - cf/api/appevents
+  - cf/api/appfiles
+  - cf/api/appinstances
+  - cf/api/applicationbits
+  - cf/api/applications
+  - cf/api/authentication
+  - cf/api/copyapplicationsource
+  - cf/api/environmentvariablegroups
+  - cf/api/featureflags
+  - cf/api/logs
+  - cf/api/organizations
+  - cf/api/password
+  - cf/api/quotas
+  - cf/api/resources
+  - cf/api/securitygroups
+  - cf/api/securitygroups/defaults
+  - cf/api/securitygroups/defaults/running
+  - cf/api/securitygroups/defaults/staging
+  - cf/api/securitygroups/spaces
+  - cf/api/spacequotas
+  - cf/api/spaces
+  - cf/api/stacks
+  - cf/appfiles
+  - cf/commandregistry
+  - cf/commands
+  - cf/commands/application
+  - cf/commands/buildpack
+  - cf/commands/domain
+  - cf/commands/environmentvariablegroup
+  - cf/commands/featureflag
+  - cf/commands/organization
+  - cf/commands/plugin
+  - cf/commands/pluginrepo
+  - cf/commands/quota
+  - cf/commands/route
+  - cf/commands/routergroups
+  - cf/commands/securitygroup
+  - cf/commands/service
+  - cf/commands/serviceaccess
+  - cf/commands/serviceauthtoken
+  - cf/commands/servicebroker
+  - cf/commands/servicekey
+  - cf/commands/space
+  - cf/commands/spacequota
+  - cf/commands/user
+  - cf/commandsloader
   - cf/configuration
+  - cf/configuration/confighelpers
   - cf/configuration/coreconfig
+  - cf/configuration/pluginconfig
+  - cf/errors
+  - cf/flagcontext
+  - cf/flags
   - cf/formatters
+  - cf/help
   - cf/i18n
+  - cf/manifest
   - cf/models
+  - cf/net
+  - cf/requirements
   - cf/resources
+  - cf/ssh
+  - cf/ssh/options
+  - cf/ssh/sigwinch
+  - cf/ssh/terminal
+  - cf/terminal
+  - cf/trace
+  - cf/uihelpers
+  - plugin
+  - plugin/models
+  - plugin/rpc
+  - util
+  - util/configv3
+  - util/downloader
+  - util/generic
+  - util/glob
+  - util/json
+  - util/sorting
+  - util/ui
+  - util/words
+  - util/words/generator
+  - version
+- name: code.cloudfoundry.org/gofileutils
+  version: 4d0c80011a0f37da1711c184028bc40137cd45af
+  repo: https://github.com/cloudfoundry/gofileutils
+  subpackages:
+  - fileutils
+- name: github.com/Azure/go-ansiterm
+  version: fa152c58bc15761d0200cb75fe958b89a9d4888e
+  repo: https://github.com/Azure/go-ansiterm
+  subpackages:
+  - winterm
 - name: github.com/blang/semver
-  version: 60ec3488bfea7cca02b021d106d9911120d25fe9
+  version: 4a1e882c79dcf4ec00d2e29fac74b9c8938d5052
   repo: https://github.com/blang/semver
+- name: github.com/cloudfoundry-incubator/cli-plugin-repo
+  version: c617dd749bce96b5357933bfde859cb9a01c6012
+  repo: https://github.com/cloudfoundry-incubator/cli-plugin-repo
+  subpackages:
+  - web
+- name: github.com/cloudfoundry/noaa
+  version: ea8759ba3628ce69b0c332ccea75ac6e373a938b
+  repo: https://github.com/cloudfoundry/noaa
+  subpackages:
+  - consumer
+  - consumer/internal
+  - errors
+- name: github.com/cloudfoundry/sonde-go
+  version: 5f5bca3bcb61dbf9371b8db82497c6396cc0ea9b
+  repo: https://github.com/cloudfoundry/sonde-go
+  subpackages:
+  - events
+- name: github.com/docker/docker
+  version: c9f26eaaf8b9f7977319d6d596f8701bbc58a108
+  repo: https://github.com/docker/docker
+  subpackages:
+  - pkg/term
+  - pkg/term/windows
+  - vendor/github.com/Azure/go-ansiterm
+  - vendor/github.com/sirupsen/logrus
+  - vendor/golang.org/x/sys/unix
+  - vendor/golang.org/x/sys/windows
+- name: github.com/fatih/color
+  version: 42c364ba490082e4815b5222728711b3440603eb
+  repo: https://github.com/fatih/color
+- name: github.com/gogo/protobuf
+  version: f9114dace7bd920b32f943b3c73fafbcbab2bf31
+  repo: https://github.com/gogo/protobuf
+  subpackages:
+  - gogoproto
+  - proto
+  - protoc-gen-gogo/descriptor
 - name: github.com/golang/protobuf
-  version: 874264fbbb43f4d91e999fecb4b40143ed611400
+  version: 8ee79997227bf9b34611aee7946ae64735e6fd93
   repo: https://github.com/golang/protobuf
   subpackages:
   - proto
   - ptypes/any
 - name: github.com/google/go-github
-  version: 2ae0bbb4f91336db239c582fe96deb8e9e6d43df
+  version: fe7d11f8add400587b6718d9f39a62e42cb04c28
   subpackages:
   - github
 - name: github.com/google/go-querystring
-  version: 9235644dd9e52eeae6fa48efd539fdc351a0af53
-  repo: https://github.com/google/go-querystring
+  version: 53e6ce116135b80d037921a7fdd5138cf32d7a8a
   subpackages:
   - query
 - name: github.com/gorilla/context
-  version: a8d44e7d8e4d532b6a27a02dd82abb31cc1b01bd
+  version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
 - name: github.com/gorilla/csrf
-  version: 50eb875b7d37289a5819742f0d60fa5c890fced9
+  version: 69581736821c33d85bbf378f42f6ad864dbd85de
 - name: github.com/gorilla/mux
-  version: 0eeaf8392f5b04950925b8a69fe70f110fa7cbfc
+  version: bcd8bc72b08df0f70df986b97f95590779502d31
 - name: github.com/gorilla/schema
-  version: 0164a00ab4cd01d814d8cd5bf63fd9fcea30e23b
+  version: 8b1100835db5bbdae88541510f70d114b91a7e4d
 - name: github.com/gorilla/securecookie
-  version: 667fe4e3466a040b780561fe9b51a83a3753eefc
+  version: e59506cc896acb7f7bf732d4fdf5e25f7ccd8983
 - name: github.com/gorilla/sessions
   version: ca9ada44574153444b00d3fd9c8559e4cc95f896
+- name: github.com/gorilla/websocket
+  version: bb547c6c5c59732c29a3266d7125a84f6c3fce32
+  repo: https://github.com/gorilla/websocket
 - name: github.com/kelseyhightower/envconfig
-  version: 9aca109c9aec4633fced9717c4a09ecab3d33111
-- name: github.com/nicksnyder/go-i18n
-  version: 37e5c2de3e03e4b82693e3fcb4a6aa2cc4eb07e3
-  repo: https://github.com/nicksnyder/go-i18n
-  subpackages:
-  - i18n
-  - i18n/bundle
-  - i18n/language
-  - i18n/translation
+  version: f611eb38b3875cc3bd991ca91c51d06446afa14c
+- name: github.com/lunixbochs/vtclean
+  version: 4428d67a89b36ecae7998e983e5814d0d9c45a04
+  repo: https://github.com/lunixbochs/vtclean
+- name: github.com/mattn/go-colorable
+  version: d228849504861217f796da67fae4f6e347643f15
+  repo: https://github.com/mattn/go-colorable
+- name: github.com/mattn/go-isatty
+  version: 30a891c33c7cde7b02a981314b4228ec99380cca
+  repo: https://github.com/mattn/go-isatty
+- name: github.com/mattn/go-runewidth
+  version: 14207d285c6c197daabb5c9793d63e7af9ab2d50
+  repo: https://github.com/mattn/go-runewidth
 - name: github.com/pkg/errors
-  version: 248dadf4e9068a0b3e79f02ed0a610d935de5302
+  version: bfd5150e4e41705ded2129ec33379de1cb90b513
+- name: github.com/SermoDigital/jose
+  version: 2bd9b81ac51d6d6134fcd4fd846bd2e7347a15f9
+  repo: https://github.com/SermoDigital/jose
+  subpackages:
+  - crypto
+  - jws
+  - jwt
+- name: github.com/Sirupsen/logrus
+  version: 59d0ca41e5faad81cac03f7a7d84ba80d9cc9673
+- name: github.com/vito/go-interact
+  version: 6928e8fe3693603deb4d861856effaee10db7bcf
+  repo: https://github.com/vito/go-interact
+  subpackages:
+  - interact
+  - interact/terminal
+- name: golang.org/x/crypto
+  version: e7ba82683099cae71475961448ab8f903ea77c26
+  repo: https://go.googlesource.com/crypto
+  subpackages:
+  - curve25519
+  - ed25519
+  - ed25519/internal/edwards25519
+  - ssh
+  - ssh/terminal
 - name: golang.org/x/net
-  version: 55a3084c9119aeb9ba2437d595b0a7e9cb635da9
-  repo: https://go.googlesource.com/net
+  version: 59a0b19b5533c7977ddeb86b017bf507ed407b12
   subpackages:
   - context
   - websocket
 - name: golang.org/x/oauth2
-  version: e86e2718db89775a4604abc10a5d3a5672e7336e
+  version: 2baa8a1b9338cf13d9eeb27696d761155fa480be
   subpackages:
   - internal
+- name: golang.org/x/sys
+  version: 0b25a408a50076fbbcae6b7ac0ea5fbb0b085e79
+  repo: https://go.googlesource.com/sys
+  subpackages:
+  - unix
+  - windows
+- name: golang.org/x/text
+  version: 210eee5cf7323015d097341bcf7166130d001cd8
+  repo: https://go.googlesource.com/text
+  subpackages:
+  - encoding
+  - internal/gen
+  - internal/tag
+  - internal/utf8internal
+  - language
+  - runes
+  - transform
+  - unicode/cldr
 - name: google.golang.org/appengine
-  version: e234e71924d4aa52444bc76f2f831f13fa1eca60
+  version: d11fc8a8dccf41ab5bd3c51a3ea52051240e325c
   subpackages:
   - internal
+  - internal/app_identity
   - internal/base
   - internal/datastore
   - internal/log
+  - internal/modules
   - internal/remote_api
   - internal/urlfetch
   - urlfetch
 - name: gopkg.in/yaml.v2
-  version: a83829b6f1293c91addabc89d0571c246397bbf4
+  version: e4d366fc3c7938e2958e662b4258c7a89e1f0e3e
 testImports: []

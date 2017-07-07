@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -100,7 +101,7 @@ func Deploy(c *h.Context, w http.ResponseWriter, r *http.Request) {
 
 func getArchiveURL(client *github.Client, user, repo, ref string) (string, error) {
 	opts := &github.RepositoryContentGetOptions{Ref: ref}
-	url, _, err := client.Repositories.GetArchiveLink(user, repo, "tarball", opts)
+	url, _, err := client.Repositories.GetArchiveLink(context.Background(), user, repo, "tarball", opts)
 	if err != nil {
 		return "", err
 	}

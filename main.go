@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 
 	a "github.com/jmcarp/deploy-to-cf/actions"
 	. "github.com/jmcarp/deploy-to-cf/helpers"
@@ -21,7 +22,8 @@ func main() {
 	if err := envconfig.Process("", &config); err != nil {
 		log.Fatalf("Invalid configuration: %s", err.Error())
 	}
-	store := sessions.NewCookieStore([]byte(config.SecretKey))
+	store := sessions.NewFilesystemStore(os.TempDir(), []byte(config.SecretKey))
+	store.MaxLength(8192)
 	templates := template.Must(template.ParseFiles("templates/index.html"))
 	oauthConfig := &oauth2.Config{
 		ClientID:     config.ClientID,
@@ -63,5 +65,4 @@ func main() {
 	p := csrf.Protect([]byte(config.SecretKey), csrf.Secure(config.SecureCookies))
 	log.Println("Listening")
 	http.ListenAndServe(":"+config.Port, p(r))
-
 }

@@ -1,6 +1,8 @@
 package helpers
 
 import (
+	"context"
+
 	"github.com/google/go-github/github"
 	yaml "gopkg.in/yaml.v2"
 )
@@ -32,7 +34,7 @@ func LoadManifest(client *github.Client, owner, repo, ref string) (App, error) {
 	wrapper := AppWrapper{}
 
 	opts := &github.RepositoryContentGetOptions{Ref: ref}
-	content, _, _, err := client.Repositories.GetContents(owner, repo, "manifest.yml", opts)
+	content, _, _, err := client.Repositories.GetContents(context.Background(), owner, repo, "manifest.yml", opts)
 	if err != nil {
 		return App{}, err
 	}

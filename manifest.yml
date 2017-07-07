@@ -5,8 +5,8 @@ applications:
   memory: 256M
 buildpack: go_buildpack
 env:
-  GOVERSION: go1.7
   GO_INSTALL_PACKAGE_SPEC: ". ./vendor/code.cloudfoundry.org/cli"
+  GOVERSION: go1.8
 deployment:
   env:
     SECRET_KEY:
